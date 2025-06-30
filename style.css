@@ -1,0 +1,397 @@
+/* =======================================
+   📄 Global Layout & Typography
+   ======================================= */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap');
+
+.stApp {
+    background-color: #e6f2ed;
+    font-family: 'Segoe UI', sans-serif;
+    color: #2e7d32 !important;
+    padding: 0;
+}
+
+main > div {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px 30px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    line-height: 1.6;
+}
+
+/* =======================================
+   🌄 Header Image
+   ======================================= */
+img[src*="ilustrasi-lingkungan.jpg"] {
+    width: 100% !important;
+    height: auto;
+    margin-top: -20px;
+    margin-bottom: 20px;
+    opacity: 0.95;
+    filter: brightness(1.05) saturate(1.1);
+}
+
+/* =======================================
+   📜 Title & Subtitle
+   ======================================= */
+h1 {
+    font-size: 36px;
+    text-align: center;
+    font-weight: 800;
+    color: #2e7d32 !important;
+    margin-bottom: 8px;
+}
+
+h4 {
+    font-size: 18px;
+    text-align: center;
+    color: #388e3c !important;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* =======================================
+   📊 Expander: Probabilitas Tiap Kelas
+   ======================================= */
+div[data-testid="stExpander"] {
+    background-color: #f1f8e9;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+}
+
+.prob-bar {
+    background: #eee;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 24px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.prob-bar-fill {
+    height: 100%;
+    padding-right: 10px;
+    text-align: right;
+    line-height: 24px;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: width 0.3s ease-in-out;
+    color: white !important;
+    min-width: 36px;
+}
+
+.prob-bar-fill.high {
+    background: linear-gradient(90deg, #43a047, #2e7d32);
+}
+
+.prob-bar-fill.medium {
+    background: linear-gradient(90deg, #fbc02d, #fdd835);
+    color: #333 !important;
+}
+
+.prob-bar-fill.low {
+    background: linear-gradient(90deg, #e53935, #d32f2f);
+}
+
+.prob-wrapper {
+    margin-bottom: 12px;
+}
+
+/* =======================================
+   📊 Chart Style
+   ======================================= */
+.css-ocqkz7.e1tzin5v3 {
+    background-color: #ffffff !important;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.css-1kyxreq.e1tzin5v2 canvas {
+    max-height: 300px !important;
+    margin-top: 10px;
+    width: 100% !important;
+}
+
+/* =======================================
+   🗳️ Result Box (Hasil Klasifikasi)
+   ======================================= */
+.result-box {
+    background-color: #fcfcfc;
+    border-left: 6px solid #4caf50;
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+    font-size: 16px;
+    line-height: 1.6;
+    transition: 0.3s;
+}
+
+.result-box:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: scale(1.01);
+}
+
+/* =======================================
+   📚 Education Box (Edukasi Artikel)
+   ======================================= */
+.edu-box {
+    background-color: #e8f5e9;
+    border-radius: 20px;
+    padding: 30px 30px 30px 35px;
+    color: #1b5e20;
+    font-size: 16px;
+    line-height: 1.65;
+    margin-top: 25px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+    border: 2px dashed #81c784;
+    transition: 0.3s ease-in-out;
+}
+
+.edu-box:hover {
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.07);
+    transform: scale(1.005);
+}
+
+.edu-box h3 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 22px;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 0.03em;
+}
+
+.edu-box p {
+    font-size: 16px;
+    color: #388e3c;
+    text-align: justify;
+    margin-bottom: 18px;
+    line-height: 1.7;
+}
+
+.edu-box ul {
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+.edu-box ul li {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+    border-left: 6px solid #66bb6a;
+    position: relative;
+    font-size: 16px;
+    color: #2e7d32;
+    list-style: none;
+}
+
+.edu-box li::before {
+    content: "♻️";
+    position: absolute;
+    left: -34px;
+    top: 18px;
+    font-size: 20px;
+}
+
+.edu-box h4 {
+    font-size: 20px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+    color: #2e7d32;
+    font-weight: 700;
+    border-left: 5px solid #66bb6a;
+    padding-left: 12px;
+    letter-spacing: 0.02em;
+}
+
+.edu-box ul li strong {
+    color: #2e7d32;
+    font-size: 17px;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.edu-box ul li span {
+    display: block;
+    color: #4e944f;
+    font-size: 14px;
+}
+
+.edu-box hr {
+    border: 0;
+    height: 1px;
+    background: #c8e6c9;
+    margin: 30px 0;
+}
+
+/* =======================================
+   🔘 Button Style
+   ======================================= */
+.stButton > button {
+    width: 100%;
+    background-color: #558b2f;
+    color: white !important;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stButton > button:hover {
+    background-color: #33691e;
+    transform: scale(1.02);
+}
+
+/* =======================================
+   📊 Gambar Info Box
+   ======================================= */
+.image-info-box {
+    font-size: 14px;
+    background-color: #f0fdf4;
+    padding: 12px 18px;
+    border-radius: 10px;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid #81c784;
+    color: #1b5e20;
+    line-height: 1.6;
+}
+
+.image-info-box strong {
+    color: #33691e;
+}
+
+/* =======================================
+   ✅ Label Upload & Kamera Fix
+   ======================================= */
+label[data-testid="stWidgetLabel"] > div:empty {
+    display: none !important;
+}
+
+.st-emotion-cache-1ort0lt p {
+    color: #2e7d32 !important;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+label.css-1weic72 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2e7d32 !important;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* =======================================
+   🌈 Tabel RGB (st.table)
+   ======================================= */
+.stTable table {
+    border-collapse: collapse !important;
+    width: 100%;
+    font-size: 14px;
+    background-color: #f1f8e9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.stTable th,
+.stTable td {
+    border: 1px solid #c5e1a5;
+    padding: 10px 12px;
+    text-align: center;
+    color: #1b5e20;
+    font-weight: 600;
+}
+
+.stTable thead {
+    background-color: #aed581;
+}
+
+.stTable tbody tr:nth-child(even) {
+    background-color: #f9fbe7;
+}
+
+.stTable tbody tr:hover {
+    background-color: #dcedc8;
+    transition: 0.2s ease-in-out;
+}
+
+/* =======================================
+   🏷️ Kategori di Samping Gambar (NEW)
+   ======================================= */
+.result-category {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2e7d32;
+    margin-top: 8px;
+    background-color: #e8f5e9;
+    padding: 6px 14px;
+    border-left: 5px solid #66bb6a;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* =======================================
+   📷 Resize Preview Image to Fit Column
+   ======================================= */
+.stImage img {
+    width: 100% !important;
+    height: auto !important;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    object-fit: cover;
+}
+.article-block {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  color: #333333;
+  line-height: 1.7;
+}
+
+.article-block h2, .article-block h3 {
+  color: #2e7d32;
+  margin-bottom: 16px;
+}
+
+.article-block ul {
+  padding-left: 1.2em;
+}
+
+.article-block li {
+  margin-bottom: 8px;
+}
+/* =======================================
+   🧾 Instruksi Pilih Sampah (Highlight Box)
+   ======================================= */
+.waste-prompt {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border-left: 6px solid #66bb6a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: center; 
+}
