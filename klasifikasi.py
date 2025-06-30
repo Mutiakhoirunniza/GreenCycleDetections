@@ -33,9 +33,7 @@ if os.path.exists("style.css"):
 # ===========================================
 # 🔍 LOAD MODEL DAN LABEL
 # ===========================================
-
-model_path = os.path.join("Model", "best_model.h5")
-model = load_model(model_path)
+model = load_model(r"Model\best_model_reexport.keras", compile=False)
 
 class_labels = ["kaca", "kertas", "logam", "plastik"]
 
