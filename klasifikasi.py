@@ -11,6 +11,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import base64
+import time
 from PIL import Image
 from tensorflow.keras.models import load_model # type: ignore
 from tensorflow.keras.applications.efficientnet import preprocess_input # type: ignore
@@ -56,7 +57,7 @@ waktu_daur_ulang = {
 # ===========================================
 def contains_face(img_pil):
     img_cv = np.array(img_pil.convert("RGB"))
-    img_cv = cv2.resize(img_cv, (300, 300))  # resize biar wajahnya masuk skala ideal
+    img_cv = cv2.resize(img_cv, (300, 300))
     gray = cv2.cvtColor(img_cv, cv2.COLOR_RGB2GRAY)
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=3, minSize=(50, 50))
@@ -158,9 +159,12 @@ if not st.session_state.img:
 # 📊 HASIL KLASIFIKASI
 # ===========================================
 elif st.session_state.img:
+    start_time = time.time()
     label, confidence, pred_probs, resized_img, entropy, gap, numeric_array = predict_image(
         st.session_state.img
     )
+    end_time = time.time()
+    classification_time = round(end_time - start_time, 3)
 
     img_bytes = convert_image_to_bytes(resized_img)
     img_base64 = base64.b64encode(img_bytes).decode()
@@ -187,6 +191,7 @@ elif st.session_state.img:
                 <p><strong>🗑️ Jenis:</strong> {label.capitalize()}</p>
                 <p><strong>📖 Penjelasan:</strong> {penjelasan[label]}</p>
                 <p><strong>⏳ Waktu Daur Ulang:</strong> {waktu_daur_ulang[label]}</p>
+                <p><strong>🕒 Waktu Klasifikasi:</strong> {classification_time} detik</p>
                 <a href="data:image/png;base64,{img_base64}" download="sampah_{label}.png">
                     <button style="background:#558b2f;color:white;padding:8px 20px;border:none;border-radius:10px;margin-top:12px;">
                         📅 Download Gambar Hasil
