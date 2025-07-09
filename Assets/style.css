@@ -191,7 +191,6 @@ div[data-testid="stExpander"] {
     position: relative;
     font-size: 16px;
     color: #2e7d32;
-    list-style: none;
 }
 
 .edu-box li::before {
@@ -281,19 +280,12 @@ label[data-testid="stWidgetLabel"] > div:empty {
     display: none !important;
 }
 
-.st-emotion-cache-1ort0lt p {
-    color: #2e7d32 !important;
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
+.st-emotion-cache-1ort0lt p,
 label.css-1weic72 {
     font-size: 15px;
     font-weight: 600;
     color: #2e7d32 !important;
     margin-bottom: 6px;
-    display: block;
 }
 
 /* =======================================
@@ -356,29 +348,7 @@ label.css-1weic72 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     object-fit: cover;
 }
-.article-block {
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin-top: 20px;
-  font-family: 'Segoe UI', sans-serif;
-  color: #333333;
-  line-height: 1.7;
-}
 
-.article-block h2, .article-block h3 {
-  color: #2e7d32;
-  margin-bottom: 16px;
-}
-
-.article-block ul {
-  padding-left: 1.2em;
-}
-
-.article-block li {
-  margin-bottom: 8px;
-}
 /* =======================================
    🧾 Instruksi Pilih Sampah (Highlight Box)
    ======================================= */
