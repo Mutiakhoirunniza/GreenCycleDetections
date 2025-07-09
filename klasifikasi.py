@@ -1,41 +1,29 @@
-# ===========================================
 # 🔐 NONAKTIFKAN oneDNN SEBELUM TENSORFLOW
-# ===========================================
 import os
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
-# ===========================================
 # 📦 IMPORT LIBRARY
-# ===========================================
 import streamlit as st
 import numpy as np
 import pandas as pd
 import base64
 import time
 from PIL import Image
-from tensorflow.keras.models import load_model # type: ignore
-from tensorflow.keras.applications.efficientnet import preprocess_input # type: ignore
-from tensorflow.keras.preprocessing import image # type: ignore
+from tensorflow.keras.models import load_model
 from io import BytesIO
 import cv2
+from utils.preprocessing import prepare_image, calculate_entropy, get_prediction_stats, get_mean_rgb
 
-# ===========================================
 # ⚙️ KONFIGURASI STREAMLIT
-# ===========================================
 st.set_page_config(page_title="GreenCycleDetections", layout="centered")
 
-# ===========================================
 # 🎨 LOAD CUSTOM CSS
-# ===========================================
-if os.path.exists("style.css"):
-    with open("style.css", "r", encoding="utf-8") as f:
+if os.path.exists("Assets/style.css"):
+    with open("Assets/style.css", "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-# ===========================================
 # 🔍 LOAD MODEL DAN LABEL
-# ===========================================
-model = load_model(r"Model\best_model_reexport.keras", compile=False)
-
+model = load_model("Model/best_model_reexport.keras", compile=False)
 class_labels = ["kaca", "kertas", "logam", "plastik"]
 
 penjelasan = {
@@ -52,9 +40,7 @@ waktu_daur_ulang = {
     "plastik": "⚠️ Bisa mencapai 100–1000 tahun tergantung jenisnya."
 }
 
-# ===========================================
 # 🧠 DETEKSI WAJAH
-# ===========================================
 def contains_face(img_pil):
     img_cv = np.array(img_pil.convert("RGB"))
     img_cv = cv2.resize(img_cv, (300, 300))
@@ -63,9 +49,7 @@ def contains_face(img_pil):
     faces = face_cascade.detectMultiScale(gray, scaleFactor=1.05, minNeighbors=3, minSize=(50, 50))
     return len(faces) > 0
 
-# ===========================================
-# 🔧 FUNGSI UTILITAS
-# ===========================================
+# 🔧 UTILITAS
 def convert_image_to_bytes(img):
     buffer = BytesIO()
     img.save(buffer, format="PNG")
@@ -74,17 +58,11 @@ def convert_image_to_bytes(img):
 def predict_image(img, threshold=0.8, entropy_threshold=1.0):
     if contains_face(img):
         return "manusia", 0.0, [], img, 0.0, 0.0, np.zeros((224, 224, 3))
-    
-    img = img.resize((224, 224)).convert("RGB")
-    img_array = image.img_to_array(img)
-    img_array = preprocess_input(img_array)
-    img_array = np.expand_dims(img_array, axis=0)
 
+    img_array = prepare_image(img)
     pred_probs = model.predict(img_array)[0]
-    confidence = np.max(pred_probs)
-    entropy = -np.sum(pred_probs * np.log(pred_probs + 1e-6))
-    sorted_probs = np.sort(pred_probs)[-2:]
-    gap = sorted_probs[1] - sorted_probs[0]
+    confidence, gap = get_prediction_stats(pred_probs)
+    entropy = calculate_entropy(pred_probs)
 
     if (confidence < threshold or entropy > entropy_threshold or gap < 0.10) and not st.session_state.force_classify:
         label = "unknown"
@@ -93,52 +71,37 @@ def predict_image(img, threshold=0.8, entropy_threshold=1.0):
 
     return label, confidence, pred_probs, img, entropy, gap, img_array[0]
 
-# ===========================================
-# ➕ INPUT DARI KAMERA
-# ===========================================
 def capture_from_webcam_streamlit():
     camera_image = st.camera_input("📷 Ambil Foto dari Kamera")
-    if camera_image:
-        return Image.open(camera_image)
-    return None
+    return Image.open(camera_image) if camera_image else None
 
-# ===========================================
 # 🔄 SESSION STATE
-# ===========================================
 for key in ["show_input_box", "img", "show_edu", "force_classify"]:
     if key not in st.session_state:
         st.session_state[key] = False if key != "img" else None
 
-# ===========================================
 # 📘 HALAMAN EDUKASI
-# ===========================================
 if st.session_state.show_edu:
     if os.path.exists("educational_text.md"):
         st.markdown(open("educational_text.md", encoding="utf-8").read())
     if st.button("🕙 Kembali ke Klasifikasi"):
-        st.session_state.show_edu = False
-        st.session_state.show_input_box = True
+        st.session_state.update({"show_edu": False, "show_input_box": True})
         st.rerun()
     st.stop()
 
-# ===========================================
 # 🏠 HALAMAN UTAMA
-# ===========================================
-if os.path.exists("Images/ilustrasi-lingkungan.jpg"):
-    st.image("Images/ilustrasi-lingkungan.jpg", use_container_width=True)
+if os.path.exists("Assets/ilustrasi-lingkungan.jpg"):
+    st.image("Assets/ilustrasi-lingkungan.jpg", use_container_width=True)
 
 st.markdown("<h1>GreenCycleDetections</h1><h4>Klasifikasi Otomatis Sampah Anorganik Berbasis Citra Digital</h4>", unsafe_allow_html=True)
 
-# ===========================================
 # 📄 INPUT GAMBAR
-# ===========================================
 if not st.session_state.img:
     if st.button("♻️ Start Classification", use_container_width=True):
         st.session_state.show_input_box = True
 
     if st.session_state.show_input_box:
         st.markdown("<div class='waste-prompt'>Pilih jenis sampah anorganik yang ingin Anda klasifikasikan</div>", unsafe_allow_html=True)
-
         col1, col2 = st.columns(2)
 
         with col1:
@@ -155,16 +118,11 @@ if not st.session_state.img:
                 st.session_state.show_input_box = False
                 st.rerun()
 
-# ===========================================
 # 📊 HASIL KLASIFIKASI
-# ===========================================
 elif st.session_state.img:
     start_time = time.time()
-    label, confidence, pred_probs, resized_img, entropy, gap, numeric_array = predict_image(
-        st.session_state.img
-    )
-    end_time = time.time()
-    classification_time = round(end_time - start_time, 3)
+    label, confidence, pred_probs, resized_img, entropy, gap, numeric_array = predict_image(st.session_state.img)
+    classification_time = round(time.time() - start_time, 3)
 
     img_bytes = convert_image_to_bytes(resized_img)
     img_base64 = base64.b64encode(img_bytes).decode()
@@ -177,7 +135,6 @@ elif st.session_state.img:
     with col2:
         if label == "manusia":
             st.markdown("<div class='result-box'><p><strong>Status:</strong> Terdeteksi Wajah Manusia</p><p>Gambar ini bukan sampah. Silakan gunakan gambar lain untuk klasifikasi sampah anorganik.</p></div>", unsafe_allow_html=True)
-
         elif label == "unknown":
             st.markdown("<div class='result-box'><p><strong>Status:</strong> Tidak Terkelompokkan</p><p>Maaf, sistem tidak dapat mengenali gambar ini. Silakan unggah gambar lain.</p></div>", unsafe_allow_html=True)
             if st.button("🚨 Gunakan Meskipun Tidak Pasti"):
@@ -217,7 +174,7 @@ elif st.session_state.img:
             st.bar_chart(df_bar.set_index("Kelas"))
 
         with st.expander("📷 Representasi Citra"):
-            mean_rgb = np.mean(numeric_array, axis=(0, 1))
+            mean_rgb = get_mean_rgb(numeric_array)
             df_rgb = pd.DataFrame({
                 "Warna": ["R (Merah)", "G (Hijau)", "B (Biru)"],
                 "Nilai Rata-Rata": [round(mean_rgb[0], 2), round(mean_rgb[1], 2), round(mean_rgb[2], 2)]
@@ -228,10 +185,7 @@ elif st.session_state.img:
     col3, col4 = st.columns(2)
     with col3:
         if st.button("🔄 Re-upload Image"):
-            st.session_state.img = None
-            st.session_state.show_input_box = True
-            st.session_state.force_classify = False
-            st.session_state.show_edu = False
+            st.session_state.update({"img": None, "show_input_box": True, "force_classify": False, "show_edu": False})
             st.rerun()
 
     with col4:

@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+*.env
+*.venv
+.env
+.venv/
+env/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Model files & large assets
+*.h5
+*.pb
+*.tflite
+*.onnx
+*.ckpt
+model/
+logs/
+checkpoints/
+
+# Streamlit
+.streamlit/config.toml
+.streamlit/secrets.toml
+
+# Images & temporary test results
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.webp
+
+# Output
+__output__/
+*.csv
+*.xlsx
+*.npy
+
+# OS
+Thumbs.db
+ehthumbs.db
