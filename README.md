@@ -65,6 +65,13 @@ streamlit run klasifikasi.py
 4. **Akses di browser**: `http://localhost:8501`
 
 ---
+## 🔗 Notebook Google Colab
+
+Klik tombol di bawah untuk membuka notebook training model di Google Colab:
+
+[![Buka di Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1xXzMAZZs5B7mA-GwucOfntKU0K8vOFi-?usp=sharing)
+
+---
 
 ## 👨‍🎓 Informasi Skripsi
 
