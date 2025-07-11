@@ -69,7 +69,7 @@ streamlit run klasifikasi.py
 
 Klik tombol di bawah untuk membuka notebook training model di Google Colab:
 
-[![Buka di Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1xXzMAZZs5B7mA-GwucOfntKU0K8vOFi-?usp=sharing)
+[![Buka di Google Colab](https://colab.research.google.com/drive/1xXzMAZZs5B7mA-GwucOfntKU0K8vOFi-?usp=sharing)
 
 ---
 
