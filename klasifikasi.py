@@ -15,7 +15,7 @@ import cv2
 from utils.preprocessing import prepare_image, calculate_entropy, get_prediction_stats, get_mean_rgb
 
 # ⚙️ KONFIGURASI STREAMLIT
-st.set_page_config(page_title="GreenCycleDetections", layout="centered")
+st.set_page_config(page_title="GreenCycleClasify", layout="centered")
 
 # 🎨 LOAD CUSTOM CSS
 if os.path.exists("Assets/style.css"):
@@ -93,7 +93,7 @@ if st.session_state.show_edu:
 if os.path.exists("Assets/ilustrasi-lingkungan.jpg"):
     st.image("Assets/ilustrasi-lingkungan.jpg", use_container_width=True)
 
-st.markdown("<h1>GreenCycleDetections</h1><h4>Klasifikasi Otomatis Sampah Anorganik Berbasis Citra Digital</h4>", unsafe_allow_html=True)
+st.markdown("<h1>GreenCycleClasify</h1><h4>Klasifikasi Otomatis Sampah Anorganik Berbasis Citra Digital</h4>", unsafe_allow_html=True)
 
 # 📄 INPUT GAMBAR
 if not st.session_state.img:
