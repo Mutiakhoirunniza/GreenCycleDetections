@@ -293,10 +293,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function classifyImage(file) {
-        const formData = new FormData();
-        formData.append('file', file);
+        loading.classList.remove('hidden');
+        resultsContent.classList.add('hidden');
 
         try {
+            // --- NEW: Client-side resizing to avoid Vercel 4.5MB limit ---
+            const resizedBlob = await new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 224; // Model input size
+                    canvas.height = 224;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 224, 224);
+                    canvas.toBlob(resolve, 'image/jpeg', 0.82);
+                };
+                img.src = URL.createObjectURL(file);
+            });
+
+            const formData = new FormData();
+            formData.append('file', resizedBlob, 'input.jpg');
+
             const response = await fetch('/api/classify', {
                 method: 'POST',
                 body: formData
