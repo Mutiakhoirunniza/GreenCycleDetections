@@ -1,18 +1,12 @@
 {
-  "rewrite": [
+  "rewrites": [
     {
       "source": "/api/(.*)",
       "destination": "/api/index.py"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/index.py"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ]
 }
