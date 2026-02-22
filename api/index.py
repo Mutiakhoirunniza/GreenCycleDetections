@@ -39,7 +39,7 @@ def load_onnx_model():
             return False
     return True
 
-class_labels = ["kaca", "kertas", "logam", "plastik"]
+class_labels = ["kaca", "logam", "kertas", "plastik"]
 
 def prepare_image(img_pil, target_size=(224, 224)):
     img_pil = img_pil.resize(target_size)

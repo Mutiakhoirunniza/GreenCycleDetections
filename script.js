@@ -200,7 +200,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tabUpload.classList.remove('active');
         dropZone.classList.add('hidden');
         cameraArea.classList.remove('hidden');
-        // previewContainer.classList.add('hidden'); // Removed so results stay visible
+
+        // --- NEW: Clear previous results when switching to camera ---
+        previewContainer.classList.add('hidden');
+        loading.classList.add('hidden');
+        resultsContent.classList.add('hidden');
+
+        // Reset capture button state
+        captureBtn.disabled = true;
+        captureBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyiapkan Kamera...';
+
         startCamera();
     });
 
@@ -208,9 +217,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             webcamElement.srcObject = stream;
+
+            // Enable button only when video is actually playing
+            webcamElement.onloadedmetadata = () => {
+                captureBtn.disabled = false;
+                captureBtn.innerHTML = '<i class="fas fa-camera"></i> Ambil Foto';
+            };
         } catch (err) {
             console.error("Camera access denied: ", err);
             alert("Tidak dapat mengakses kamera. Pastikan izin kamera sudah diberikan.");
+            captureBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Kamera Gagal';
         }
     }
 
