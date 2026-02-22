@@ -319,17 +319,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: formData
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || `Server Error ${response.status}`);
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || data.detail || `Error ${response.status}`);
+                displayResults(data);
+                updateStats(data.label);
+            } else {
+                const fullText = await response.text();
+                console.error("Non-JSON response:", fullText);
+                throw new Error(`Server returned non-JSON response (starts with: ${fullText.substring(0, 50)}...).`);
             }
-
-            const data = await response.json();
-            displayResults(data);
-            updateStats(data.label);
         } catch (error) {
             console.error(error);
-            alert(`Terjadi kesalahan: ${error.message}. Pastikan server backend berjalan.`);
+            alert(`Terjadi kesalahan: ${error.message}`);
             loading.classList.add('hidden');
         }
     }
