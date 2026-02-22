@@ -12,7 +12,7 @@ os.environ["TF_USE_LEGACY_KERAS"] = "1"
 os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 
 import tensorflow as tf
-import tf_keras as keras
+from tensorflow import keras
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -131,7 +131,7 @@ def load_prediction_model():
             cleaned_config = deep_clean_config(full_config)
             
             # Use Fallbacks for K3 specific layers
-            from tf_keras.layers import Layer, Normalization, Rescaling
+            from tensorflow.keras.layers import Layer, Normalization, Rescaling
             custom_map = {
                 "DTypePolicy": lambda **kwargs: "float32",
                 "Normalization": Normalization,
