@@ -43,26 +43,29 @@ Sampah anorganik seperti plastik, kaca, logam, dan kertas merupakan jenis limbah
 
 ## 🚀 Cara Menjalankan Aplikasi
 
-1. **Clone repositori ini**:
+### Opsi 1: Vercel (Rekomendasi)
+Aplikasi ini sekarang mendukung deployment ke **Vercel** sebagai Web App modern.
+1. Hubungkan repositori GitHub Anda ke Vercel.
+2. Vercel akan secara otomatis mendeteksi `api/index.py` sebagai Serverless Function.
+3. Klik **Deploy**.
 
-```bash
-git clone https://github.com/Mutiakhoirunniza/GreenCycleDetections.git
-cd GreenCycleDetections
-```
+### Opsi 2: Lokal (FastAPI + Modern UI)
+1. Install dependensi:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. Jalankan backend:
+   ```bash
+   uvicorn api.index:app --reload
+   ```
+3. Buka `index.html` di browser Anda.
 
-2. **Install dependensi**:
-
-```bash
-pip install -r requirements.txt
-```
-
-3. **Jalankan aplikasi Streamlit**:
-
+### Opsi 3: Streamlit (Legacy)
+Jika ingin menggunakan versi lama:
 ```bash
 streamlit run klasifikasi.py
 ```
 
-4. **Akses di browser**: `http://localhost:8501`
 
 ---
 ## 🔗 Notebook Google Colab
