@@ -22,9 +22,10 @@ venv/
 .vscode/
 
 # Model files & large assets
+# *.keras (Allowing for Vercel Keras 3 deployment)
 *.h5
 *.pb
-*.tflite
+# *.tflite (Allowing tflite for Vercel)
 *.onnx
 *.ckpt
 model/
