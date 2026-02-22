@@ -26,6 +26,7 @@ venv/
 *.h5
 *.pb
 # *.tflite (Allowing tflite for Vercel)
+# *.onnx (Allowing for Vercel ONNX deployment)
 *.onnx
 *.ckpt
 model/

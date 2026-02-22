@@ -5,8 +5,8 @@ import numpy as np
 from PIL import Image
 from io import BytesIO
 
-# --- LIGHTWEIGHT TFLITE RUNTIME ---
-import tflite_runtime.interpreter as tflite
+# --- LIGHTWEIGHT ONNX RUNTIME ---
+import onnxruntime as ort
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -16,30 +16,26 @@ app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-MODEL_PATH = os.path.join(BASE_DIR, "Model", "model.tflite")
+MODEL_PATH = os.path.join(BASE_DIR, "Model", "model.onnx")
 
-# Global variables for TFLite
-interpreter = None
-input_details = None
-output_details = None
+# Global variables for ONNX
+session = None
 
-def load_tflite_model():
-    global interpreter, input_details, output_details
-    if interpreter is None:
+def load_onnx_model():
+    global session
+    if session is None:
         if not os.path.exists(MODEL_PATH):
             print(f"ERROR: Model file not found at {MODEL_PATH}")
             return False
         
         try:
-            print(f"DEBUG: Loading TFLite model from {MODEL_PATH}")
-            interpreter = tflite.Interpreter(model_path=MODEL_PATH)
-            interpreter.allocate_tensors()
-            input_details = interpreter.get_input_details()
-            output_details = interpreter.get_output_details()
-            print("DEBUG: TFLite Model loaded successfully!")
+            print(f"DEBUG: Loading ONNX model from {MODEL_PATH}")
+            # Use CPU execution provider for Vercel
+            session = ort.InferenceSession(MODEL_PATH, providers=['CPUExecutionProvider'])
+            print("DEBUG: ONNX Model loaded successfully!")
             return True
         except Exception as e:
-            print(f"ERROR: Could not load TFLite model: {e}")
+            print(f"ERROR: Could not load ONNX model: {e}")
             return False
     return True
 
@@ -48,9 +44,8 @@ class_labels = ["kaca", "kertas", "logam", "plastik"]
 def prepare_image(img_pil, target_size=(224, 224)):
     img_pil = img_pil.resize(target_size)
     img_array = np.array(img_pil).astype("float32")
-    # EfficientNet B0 Scale factor: [(x / 255.0)] or similar is often handled inside the TFLite model 
-    # if it was converted from a Keras model with a Rescaling layer.
-    # We'll follow the standard preprocess_input: ((x / 1.0)) since EfNet usually takes [0, 255]
+    # EfficientNet preprocessing: scale usually handled in the model or via simple 1/255
+    # If the model expects [0, 255], we just expand dims.
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
 
@@ -61,19 +56,14 @@ async def classify(file: UploadFile = File(...)):
         contents = await file.read()
         img_pil = Image.open(BytesIO(contents)).convert("RGB")
         
-        if not load_tflite_model():
-            return {"status": "error_model", "message": "Model file (.tflite) not found or failed to load."}
+        if not load_onnx_model():
+            return {"status": "error_model", "message": "Model file (.onnx) not found."}
 
         img_array = prepare_image(img_pil)
         
-        # Set input tensor
-        interpreter.set_tensor(input_details[0]['index'], img_array)
-        
-        # Run inference
-        interpreter.invoke()
-        
-        # Get output tensor
-        pred_probs = interpreter.get_tensor(output_details[0]['index'])[0]
+        # ONNX inference
+        input_name = session.get_inputs()[0].name
+        pred_probs = session.run(None, {input_name: img_array})[0][0]
         
         idx = np.argmax(pred_probs)
         label = class_labels[idx]
@@ -103,4 +93,4 @@ async def health(): return {"status": "ok", "model_exists": os.path.exists(MODEL
 
 @app.on_event("startup")
 async def startup_event():
-    load_tflite_model()
+    load_onnx_model()
